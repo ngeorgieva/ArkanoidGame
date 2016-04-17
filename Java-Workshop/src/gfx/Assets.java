@@ -5,14 +5,18 @@ import java.util.HashMap;
 
 public class Assets {
 
-    private static final int width = 87, height = 30;
+    private static final int paddleWidth = 87;
+    private static final int paddleHeight = 30;
 
-    public static BufferedImage player1;
+    public static BufferedImage paddle;
+    public static BufferedImage brick;
+
     //Loads every resource needed for the game
     public static void init() {
-        SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
+        SpriteSheet paddlePic = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
+        brick = ImageLoader.loadImage("/textures/blueBrick2.png");
 
-        player1 = sheet.crop(0, 0, width, height);
+        paddle = paddlePic.crop(0, 0, paddleWidth, paddleHeight);
     //    player2 = sheet.crop(width, 0, width, height);
     }
 }

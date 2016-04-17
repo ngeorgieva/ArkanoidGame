@@ -4,9 +4,9 @@ import display.KeyboardExample;
 
 import javax.swing.*;
 
-public class Launcher extends JPanel {
+public class Launcher {
     public static void main(String[] args) {
-        Game game = new Game("Title game!", 300, 400);
+        Game game = new Game("Arkanoid!", 300, 400);
         KeyboardExample keyboardExample = new KeyboardExample();
         game.add(keyboardExample);
         game.start();

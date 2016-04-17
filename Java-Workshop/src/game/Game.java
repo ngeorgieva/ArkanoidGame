@@ -5,13 +5,10 @@ import gfx.Assets;
 import gfx.ImageLoader;
 import gfx.SpriteSheet;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Game extends JPanel implements Runnable {
     private Display display;
@@ -20,17 +17,17 @@ public class Game extends JPanel implements Runnable {
     private Ball ball;
     private boolean running = false;
     private Thread thread;
-    private boolean ingame = true;
+    //private boolean ingame = true;
     private InputHandler inputHandler;
     private BufferStrategy bs;
     private Graphics g;
     private String message = "Game Over";
-    private BufferedImage img;
+    private BufferedImage bckgrImage;
     private SpriteSheet sh;
 
 
-    //Player
-    public static Player player;
+    //Paddle
+    public static Paddle paddle;
     private Brick bricks[];
 
     public Game(String title, int width, int height) {
@@ -43,11 +40,11 @@ public class Game extends JPanel implements Runnable {
     //everything ready for our game
     private void init() {
         //Initializing a new display.Display object
-        display = new Display(this.title, this.width, this.height);
-        img = ImageLoader.loadImage("/textures/test2.png");
-        sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
-        ball = new Ball();
-        bricks = new Brick[Constants.N_OF_BRICKS];
+        this.display = new Display(this.title, this.width, this.height);
+        this.bckgrImage = ImageLoader.loadImage("/textures/test2.png");
+        this.sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
+        this.ball = new Ball();
+        this.bricks = new Brick[Constants.N_OF_BRICKS];
         int k = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 6; j++) {
@@ -55,6 +52,7 @@ public class Game extends JPanel implements Runnable {
                 k++;
             }
         }
+
         this.inputHandler = new InputHandler(this.display);
         Assets.init();
 
@@ -62,14 +60,14 @@ public class Game extends JPanel implements Runnable {
         //any more states set up
         //       StateManager.setState(gameState);
 
-        player = new Player();
+        paddle = new Paddle();
     }
 
 
     //The method that will update all the variables
     private void tick() {
 
-        player.tick();
+        paddle.tick();
 
 
     }
@@ -111,11 +109,16 @@ public class Game extends JPanel implements Runnable {
         g.clearRect(0, 0, this.width, this.height);
         //Beginning of drawing things on the screen
 
-        g.drawImage(img, 0, 0, this.width, this.height, null);
+        g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
-        player.render(g);
-        g.setColor(Color.red);
+        paddle.render(g);
 
+        for (Brick brick : bricks) {
+            if (!brick.isDestroyed()){
+                brick.render(g);
+            }
+        }
+        //g.setColor(Color.red);
 
         //End of drawing objects
 

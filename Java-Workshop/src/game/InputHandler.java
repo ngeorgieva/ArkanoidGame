@@ -2,7 +2,6 @@ package game;
 
 import display.Display;
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -17,10 +16,10 @@ public class InputHandler implements KeyListener {
         int keyCode = e.getKeyCode();
 
             if (keyCode == KeyEvent.VK_LEFT) {
-                Game.player.goingLeft = true;
+                Game.paddle.goingLeft = true;
             }
             if (keyCode == KeyEvent.VK_RIGHT) {
-                Game.player.goingRight = true;
+                Game.paddle.goingRight = true;
             }
             if (keyCode == KeyEvent.VK_ESCAPE) {
                 System.exit(0);
@@ -40,10 +39,10 @@ public class InputHandler implements KeyListener {
 
 
         if (keyCode == KeyEvent.VK_LEFT) {
-            Game.player.goingLeft = false;
+            Game.paddle.goingLeft = false;
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
-            Game.player.goingRight = false;
+            Game.paddle.goingRight = false;
         }
     }
 }

@@ -1,6 +1,9 @@
 package game;
 
+import gfx.Assets;
+
 import javax.swing.ImageIcon;
+import java.awt.*;
 
 public class Brick extends Sprite {
 
@@ -28,5 +31,10 @@ public class Brick extends Sprite {
     public void setDestroyed(boolean val) {
 
         destroyed = val;
+    }
+
+    public void render(Graphics g) {
+
+        g.drawImage(Assets.brick, this.x, this.y, null);
     }
 }
