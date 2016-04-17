@@ -14,7 +14,7 @@ public class Game extends JPanel implements Runnable {
     private Display display;
     public int width, height;
     public String title;
-    private Ball ball;
+    public static Ball ball;
     private boolean running = false;
     private Thread thread;
     //private boolean ingame = true;
@@ -24,7 +24,6 @@ public class Game extends JPanel implements Runnable {
     private String message = "Game Over";
     private BufferedImage bckgrImage;
     private SpriteSheet sh;
-
 
     //Paddle
     public static Paddle paddle;
@@ -43,7 +42,7 @@ public class Game extends JPanel implements Runnable {
         this.display = new Display(this.title, this.width, this.height);
         this.bckgrImage = ImageLoader.loadImage("/textures/test2.png");
         this.sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
-        this.ball = new Ball();
+        ball = new Ball();
         this.bricks = new Brick[Constants.N_OF_BRICKS];
         int k = 0;
         for (int i = 0; i < 5; i++) {
@@ -68,6 +67,7 @@ public class Game extends JPanel implements Runnable {
     private void tick() {
 
         paddle.tick();
+        ball.move();
 
 
     }
