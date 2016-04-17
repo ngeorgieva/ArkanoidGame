@@ -45,7 +45,7 @@ public class Game extends JPanel implements Runnable {
         //Initializing a new display.Display object
         display = new Display(this.title, this.width, this.height);
         img = ImageLoader.loadImage("/textures/test2.png");
-        sh = new SpriteSheet(ImageLoader.loadImage("/textures/paddle.gif"));
+        sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
         ball = new Ball();
         bricks = new Brick[Constants.N_OF_BRICKS];
         int k = 0;

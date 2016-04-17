@@ -45,6 +45,12 @@ public class Player {
     public void tick() {
         //Update the bounding box's position
         this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
+        if (x <= 0) {
+            x = 0;
+        }
+        if (x >= Constants.WIDTH - 87) {
+            x = Constants.WIDTH - 87;
+        }
         if(goingLeft) {
             this.x -= this.velocity;
         }
