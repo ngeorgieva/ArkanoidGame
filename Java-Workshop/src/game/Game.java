@@ -113,6 +113,8 @@ public class Game extends JPanel implements Runnable {
 
         paddle.render(g);
 
+        ball.render(g);
+
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()){
                 brick.render(g);

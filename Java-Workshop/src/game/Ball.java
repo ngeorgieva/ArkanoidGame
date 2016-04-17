@@ -1,6 +1,9 @@
 package game;
 
+import gfx.Assets;
+
 import javax.swing.ImageIcon;
+import java.awt.*;
 
 public class Ball extends Sprite {
 
@@ -55,5 +58,9 @@ public class Ball extends Sprite {
 
     public int getYDir() {
         return ydir;
+    }
+
+    public void render(Graphics g) {
+        g.drawImage(Assets.ball, this.x, this.y, null);
     }
 }
