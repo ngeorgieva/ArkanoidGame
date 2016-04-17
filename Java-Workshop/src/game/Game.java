@@ -1,9 +1,9 @@
 package game;
 
 import display.Display;
-import gfx.Assets;
 import gfx.ImageLoader;
 import gfx.SpriteSheet;
+import gfx.Assets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ public class Game extends JPanel implements Runnable {
     private Graphics g;
     private String message = "Game Over";
     private BufferedImage bckgrImage;
-    private SpriteSheet sh;
+    //private SpriteSheet sh;
 
     //Paddle
     public static Paddle paddle;
@@ -41,7 +41,7 @@ public class Game extends JPanel implements Runnable {
         //Initializing a new display.Display object
         this.display = new Display(this.title, this.width, this.height);
         this.bckgrImage = ImageLoader.loadImage("/textures/test2.png");
-        this.sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
+        //this.sh = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
         ball = new Ball();
         this.bricks = new Brick[Constants.N_OF_BRICKS];
         int k = 0;
@@ -112,7 +112,6 @@ public class Game extends JPanel implements Runnable {
         g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
         paddle.render(g);
-
         ball.render(g);
 
         for (Brick brick : bricks) {

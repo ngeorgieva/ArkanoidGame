@@ -43,7 +43,6 @@ public class Display extends Canvas{
         //Making sure the Canvas will stay with the given width and height
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
-
         //Linking the canvas onto the frame
         frame.add(canvas);
         //Resizing a little bit to ensure that everything on the canvas is visible

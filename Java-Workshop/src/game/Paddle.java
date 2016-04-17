@@ -42,8 +42,7 @@ public class Paddle {
 
     //Update the movement of the paddle
     public void tick() {
-        //Update the bounding box's position
-        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
+
         if (x <= 0) {
             x = 0;
         }
@@ -56,10 +55,14 @@ public class Paddle {
         if(goingRight) {
             this.x += this.velocity;
         }
+
+        //Update the bounding box's position
+        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
     }
 
     //Draws the paddle
     public void render(Graphics g) {
+
         g.drawImage(Assets.paddle, this.x, this.y, null);
     }
 }
