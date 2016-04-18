@@ -2,11 +2,12 @@ package game;
 
 import display.Display;
 import gfx.ImageLoader;
-import gfx.SpriteSheet;
 import gfx.Assets;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -130,11 +131,11 @@ public class Game extends JPanel implements Runnable {
         g.dispose();
     }
 
-    private void gameFinished(Graphics2D g2d) {
+    private void gameFinished(Graphics g) {
 
         Font font = new Font("Verdana", Font.BOLD, 18);
         FontMetrics metr = this.getFontMetrics(font);
-        g2d.drawString(message,
+        g.drawString(message,
                 (Constants.WIDTH - metr.stringWidth(message)) / 2,
                 Constants.WIDTH / 2);
 
@@ -218,6 +219,7 @@ public class Game extends JPanel implements Runnable {
             return;
         }
         running = false;
+
         //The join method stops the current method from executing and it
         //must be surrounded in try-catch in order to work
         try {
@@ -230,7 +232,7 @@ public class Game extends JPanel implements Runnable {
     private void checkForCollision() {
 
         if (ball.getBoundingBox().getMaxY() > Constants.BOTTOM_EDGE) {
-            //this.stop();
+            this.stop();
         }
 
         for (int i = 0, j = 0; i < Constants.N_OF_BRICKS; i++) {
