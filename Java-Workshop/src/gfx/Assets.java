@@ -18,6 +18,5 @@ public class Assets {
         ball = ImageLoader.loadImage("/textures/ball - Copy.gif");
 
         paddle = paddlePic.crop(0, 0, paddleWidth, paddleHeight);
-    //    player2 = sheet.crop(width, 0, width, height);
     }
 }

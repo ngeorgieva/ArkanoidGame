@@ -9,12 +9,12 @@ import java.awt.*;
 public class Ball {
 
     private int x, y;
-    private int velocity;
     private int width, height;
     private int radius;
     private Rectangle boundingBox;
     private int xdir;
     private int ydir;
+    private int velocity;
 
     public Ball() {
         this.x = Constants.INIT_BALL_X;
@@ -26,6 +26,26 @@ public class Ball {
         this.width = this.radius * 2;
         this.height = this.radius * 2;
         this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
+    }
+
+    public void moveFaster() {
+
+        x += xdir;
+        y += ydir;
+
+        if (x == 0) {
+            setXDir(2);
+        }
+
+        if (x == Constants.WIDTH - this.width) {
+            setXDir(-2);
+        }
+
+        if (y == 0) {
+            setYDir(2);
+        }
+
+        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
     }
 
     public void move() {
@@ -52,16 +72,8 @@ public class Ball {
         return this.boundingBox;
     }
 
-    //
-//    private void resetState() {
-//
-//        x = Constants.INIT_BALL_X;
-//        y = Constants.INIT_BALL_Y;
-//    }
 
-    public void setXDir(int x) {
-        xdir = x;
-    }
+    public void setXDir(int x) { xdir = x; }
 
     public void setYDir(int y) {
         ydir = y;

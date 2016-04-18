@@ -17,11 +17,6 @@ public class Brick {
         this.width = Constants.BRICK_WIDTH;
         this.height = Constants.BRICK_HEIGHT;
 
-//        ImageIcon ii = new ImageIcon("images/blueBrick2.png");
-//        image = ii.getImage();
-//
-//        imageWidth = image.getWidth(null);
-//        imageHeight = image.getHeight(null);
 
         this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
         destroyed = false;

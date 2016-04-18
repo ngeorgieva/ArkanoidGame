@@ -18,7 +18,7 @@ public class InputHandler implements KeyListener {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_SPACE) {
-            Game.ball.move();
+            Game.ball.moveFaster();
         }
         if (keyCode == KeyEvent.VK_LEFT) {
             Game.paddle.goingLeft = true;
@@ -41,7 +41,9 @@ public class InputHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
 
         int keyCode = e.getKeyCode();
-
+        if (keyCode == KeyEvent.VK_SPACE) {
+            Game.ball.moveFaster();
+        }
         if (keyCode == KeyEvent.VK_LEFT) {
             Game.paddle.goingLeft = false;
         }
