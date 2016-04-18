@@ -1,5 +1,6 @@
 package game;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import gfx.Assets;
 
 import java.awt.*;
@@ -8,7 +9,7 @@ public class Paddle {
     private int x, y;
     private int velocity;
     private int width, height;
-    private int health;
+    //private int health;
 
     private Rectangle boundingBox;
 
@@ -16,21 +17,21 @@ public class Paddle {
     public static boolean goingRight;
 
     public Paddle() {
-        this.x = 110;
-        this.y = 380;
-        this.width = 30;
-        this.height = 87;
-        this.health = 50;
+        this.x = Constants.INIT_PADDLE_X;
+        this.y = Constants.INIT_PADDLE_Y;
+        this.width = Constants.PADDLE_WIDTH;
+        this.height = Constants.PADDLE_HEIGHT;
+        //this.health = 50;
         this.velocity = 2;
-        this.boundingBox = new Rectangle(this.width, this.height);
+        this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
 
         this.goingLeft = false;
         this.goingRight = false;
     }
 
-    public int getHealth() {
-        return this.health;
-    }
+//    //public int getHealth() {
+//        return this.health;
+//    }
 
     //Checks if the paddle intersects with something
     public boolean Intersects(Rectangle r) {
@@ -46,9 +47,10 @@ public class Paddle {
         if (x <= 0) {
             x = 0;
         }
-        if (x >= Constants.WIDTH - 87) {
-            x = Constants.WIDTH - 87;
+        if (x >= Constants.WIDTH - this.width) {
+            x = Constants.WIDTH - this.width;
         }
+
         if(goingLeft) {
             this.x -= this.velocity;
         }
@@ -58,6 +60,10 @@ public class Paddle {
 
         //Update the bounding box's position
         this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
+    }
+
+    public Rectangle getBoundingBox() {
+        return boundingBox;
     }
 
     //Draws the paddle

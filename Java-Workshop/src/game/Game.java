@@ -23,6 +23,7 @@ public class Game extends JPanel implements Runnable {
     private Graphics g;
     private String message = "Game Over";
     private BufferedImage bckgrImage;
+    private int points;
     //private SpriteSheet sh;
 
     //Paddle
@@ -33,6 +34,7 @@ public class Game extends JPanel implements Runnable {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.points = 0;
     }
 
     //Initializes all the graphics and it will get
@@ -68,8 +70,7 @@ public class Game extends JPanel implements Runnable {
 
         paddle.tick();
         ball.move();
-
-
+        this.checkForCollision();
     }
 
 //    private void drawObjects(Graphics2D g2d) {
@@ -115,7 +116,7 @@ public class Game extends JPanel implements Runnable {
         ball.render(g);
 
         for (Brick brick : bricks) {
-            if (!brick.isDestroyed()){
+            if (!brick.isDestroyed()) {
                 brick.render(g);
             }
         }
@@ -223,6 +224,95 @@ public class Game extends JPanel implements Runnable {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkForCollision() {
+
+        if (ball.getBoundingBox().getMaxY() > Constants.BOTTOM_EDGE) {
+            //this.stop();
+        }
+
+        for (int i = 0, j = 0; i < Constants.N_OF_BRICKS; i++) {
+
+            if (bricks[i].isDestroyed()) {
+                j++;
+            }
+
+            if (j == Constants.N_OF_BRICKS) {
+
+                message = "Victory";
+                this.stop();
+            }
+        }
+
+        if ((ball.getBoundingBox()).intersects(paddle.getBoundingBox())) {
+
+            int paddleLPos = (int) paddle.getBoundingBox().getMinX();
+            int ballLPos = (int) ball.getBoundingBox().getMinX();
+
+            int first = paddleLPos + 8;
+            int second = paddleLPos + 16;
+            int third = paddleLPos + 24;
+            int fourth = paddleLPos + 32;
+
+            if (ballLPos < first) {
+                ball.setXDir(-1);
+                ball.setYDir(-1);
+            }
+
+            if (ballLPos >= first && ballLPos < second) {
+                ball.setXDir(-1);
+                ball.setYDir(-1 * ball.getYDir());
+            }
+
+            if (ballLPos >= second && ballLPos < third) {
+                ball.setXDir(0);
+                ball.setYDir(-1);
+            }
+
+            if (ballLPos >= third && ballLPos < fourth) {
+                ball.setXDir(1);
+                ball.setYDir(-1 * ball.getYDir());
+            }
+
+            if (ballLPos > fourth) {
+                ball.setXDir(1);
+                ball.setYDir(-1);
+            }
+        }
+
+        for (int i = 0; i < Constants.N_OF_BRICKS; i++) {
+
+            if ((ball.getBoundingBox()).intersects(bricks[i].getBoundingBox())) {
+
+                int ballLeft = (int) ball.getBoundingBox().getMinX();
+                int ballHeight = (int) ball.getBoundingBox().getHeight();
+                int ballWidth = (int) ball.getBoundingBox().getWidth();
+                int ballTop = (int) ball.getBoundingBox().getMinY();
+
+                Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+                Point pointLeft = new Point(ballLeft - 1, ballTop);
+                Point pointTop = new Point(ballLeft, ballTop - 1);
+                Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+
+                if (!bricks[i].isDestroyed()) {
+                    if (bricks[i].getBoundingBox().contains(pointRight)) {
+                        ball.setXDir(-1);
+                    } else if (bricks[i].getBoundingBox().contains(pointLeft)) {
+                        ball.setXDir(1);
+                    }
+
+                    if (bricks[i].getBoundingBox().contains(pointTop)) {
+                        ball.setYDir(1);
+                    } else if (bricks[i].getBoundingBox().contains(pointBottom)) {
+                        ball.setYDir(-1);
+                    }
+
+                    bricks[i].setDestroyed(true);
+                    points += 10;
+                }
+            }
         }
     }
 }

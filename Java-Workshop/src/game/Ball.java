@@ -25,7 +25,7 @@ public class Ball {
         this.radius = Constants.BALL_RADIUS;
         this.width = this.radius * 2;
         this.height = this.radius * 2;
-        this.boundingBox = new Rectangle(this.width, this.height);
+        this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
     }
 
     public void move() {
@@ -44,8 +44,15 @@ public class Ball {
         if (y == 0) {
             setYDir(1);
         }
+
+        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
     }
-//
+
+    public Rectangle getBoundingBox() {
+        return this.boundingBox;
+    }
+
+    //
 //    private void resetState() {
 //
 //        x = Constants.INIT_BALL_X;
