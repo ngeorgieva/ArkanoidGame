@@ -34,7 +34,7 @@ public class Display extends Canvas{
         //Frame is not visible by default, so we enable the visibility
         frame.setVisible(true);
         //Enabling the frame to be focusable
-        frame.setFocusable(true);
+        frame.setFocusable(false);
 
         //Initializing Canvas in the window
         canvas = new Canvas();
@@ -43,6 +43,8 @@ public class Display extends Canvas{
         //Making sure the Canvas will stay with the given width and height
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
+        canvas.setFocusable(true);
+
         //Linking the canvas onto the frame
         frame.add(canvas);
         //Resizing a little bit to ensure that everything on the canvas is visible

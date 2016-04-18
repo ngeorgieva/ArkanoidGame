@@ -22,7 +22,7 @@ public class Paddle {
         this.width = Constants.PADDLE_WIDTH;
         this.height = Constants.PADDLE_HEIGHT;
         //this.health = 50;
-        this.velocity = 2;
+        this.velocity = 10;
         this.boundingBox = new Rectangle(this.x, this.y, this.width, this.height);
 
         this.goingLeft = false;
@@ -44,22 +44,27 @@ public class Paddle {
     //Update the movement of the paddle
     public void tick() {
 
-        if (x <= 0) {
-            x = 0;
-        }
-        if (x >= Constants.WIDTH - this.width) {
-            x = Constants.WIDTH - this.width;
-        }
+        //Update the bounding box's position
+        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
 
         if(goingLeft) {
             this.x -= this.velocity;
+            if (x <= 0) {
+                x = 0;
+            }
+            if (x >= Constants.WIDTH - this.width) {
+                x = Constants.WIDTH - this.width;
+            }
         }
         if(goingRight) {
             this.x += this.velocity;
+            if (x <= 0) {
+                x = 0;
+            }
+            if (x >= Constants.WIDTH - this.width) {
+                x = Constants.WIDTH - this.width;
+            }
         }
-
-        //Update the bounding box's position
-        this.boundingBox.setBounds(this.x, this.y, this.width, this.height);
     }
 
     public Rectangle getBoundingBox() {
