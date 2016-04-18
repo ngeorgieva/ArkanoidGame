@@ -6,8 +6,6 @@ import gfx.Assets;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -16,7 +14,7 @@ public class Game extends JPanel implements Runnable {
     public int width, height;
     public String title;
     public static Ball ball;
-    private boolean running = false;
+    private boolean isRunning = false;
     private Thread thread;
     //private boolean ingame = true;
     private InputHandler inputHandler;
@@ -110,16 +108,19 @@ public class Game extends JPanel implements Runnable {
         //Clear the screen at every frame
         g.clearRect(0, 0, this.width, this.height);
         //Beginning of drawing things on the screen
+        if (isRunning) {
+            g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
-        g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
+            paddle.render(g);
+            ball.render(g);
 
-        paddle.render(g);
-        ball.render(g);
-
-        for (Brick brick : bricks) {
-            if (!brick.isDestroyed()) {
-                brick.render(g);
+            for (Brick brick : bricks) {
+                if (!brick.isDestroyed()) {
+                    brick.render(g);
+                }
             }
+        } else {
+            this.getFinalScreen(g);
         }
         //g.setColor(Color.red);
 
@@ -131,14 +132,20 @@ public class Game extends JPanel implements Runnable {
         g.dispose();
     }
 
-    private void gameFinished(Graphics g) {
+    private void getFinalScreen(Graphics g) {
 
         Font font = new Font("Verdana", Font.BOLD, 18);
         FontMetrics metr = this.getFontMetrics(font);
+
+        g.setColor(Color.BLACK);
+        g.setFont(font);
         g.drawString(message,
                 (Constants.WIDTH - metr.stringWidth(message)) / 2,
                 Constants.WIDTH / 2);
-
+        String pointsMessage = String.format("Points: %d", points);
+        g.drawString(String.format(pointsMessage),
+                (Constants.WIDTH - metr.stringWidth(pointsMessage)) / 2,
+                Constants.WIDTH / 2 + 30);
     }
 
     //Implementing the interface's method
@@ -160,7 +167,7 @@ public class Game extends JPanel implements Runnable {
         long timer = 0;
         int ticks = 0;
 
-        while (running) {
+        while (isRunning) {
             //Sets the now variable to the current time in nanoseconds
             now = System.nanoTime();
             //Amount of time passed divided by the max amount of time allowed.
@@ -194,15 +201,15 @@ public class Game extends JPanel implements Runnable {
     //Synchronized is used because our method is working with threads
     //so we ensure ourselves that nothing will go bad
     public synchronized void start() {
-        //If the game is running exit the method
+        //If the game is isRunning exit the method
         //This is done in order to prevent the game to initialize
         //more than enough threads
-        if (running) {
+        if (isRunning) {
             return;
         }
         //Setting the while-game-loop to run
 
-        running = true;
+        isRunning = true;
         //Initialize the thread that will work with "this" class (game.Game)
         thread = new Thread(this);
         //The start method will call start the new thread and it will call
@@ -212,14 +219,13 @@ public class Game extends JPanel implements Runnable {
 
     //Creating a stop method for the Thread to stop our game
     public synchronized void stop() {
-        //If the game is not running exit the method
+        //If the game is not isRunning exit the method
         //This is done to prevent the game from stopping a
         //non-existing thread and cause errors
-        if (!running) {
+        if (!isRunning) {
             return;
         }
-        running = false;
-
+        isRunning = false;
         //The join method stops the current method from executing and it
         //must be surrounded in try-catch in order to work
         try {
@@ -232,7 +238,7 @@ public class Game extends JPanel implements Runnable {
     private void checkForCollision() {
 
         if (ball.getBoundingBox().getMaxY() > Constants.BOTTOM_EDGE) {
-            this.stop();
+            this.isRunning = false;
         }
 
         for (int i = 0, j = 0; i < Constants.N_OF_BRICKS; i++) {
@@ -244,7 +250,7 @@ public class Game extends JPanel implements Runnable {
             if (j == Constants.N_OF_BRICKS) {
 
                 message = "Victory";
-                this.stop();
+                this.isRunning = false;
             }
         }
 

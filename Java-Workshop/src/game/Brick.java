@@ -1,8 +1,6 @@
 package game;
 
 import gfx.Assets;
-
-import javax.swing.ImageIcon;
 import java.awt.*;
 
 public class Brick {
