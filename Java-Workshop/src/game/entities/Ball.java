@@ -1,7 +1,6 @@
 package game.entities;
 
 import game.Constants;
-import game.InputHandler;
 import gfx.Assets;
 
 import java.awt.*;
@@ -11,7 +10,7 @@ public class Ball extends GameObject {
     private int xdir;
     private int ydir;
     private int velocity = 5;
-    public static boolean isBallMoving = false;
+    public static boolean hasGameStarted = false;
 
     public Ball() {
         this.x = Constants.INIT_BALL_X;
@@ -32,7 +31,7 @@ public class Ball extends GameObject {
     }
 
     public void move() {
-        if (!isBallMoving) {
+        if (!hasGameStarted) {
             this.x = Paddle.paddleX + (Constants.INIT_BALL_X - Constants.INIT_PADDLE_X);
         } else {
             x += xdir * velocity;

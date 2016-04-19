@@ -29,42 +29,57 @@ public class Game extends JPanel implements Runnable {
     public static Paddle paddle;
     private Brick bricks[];
 
+    public static enum STATE {
+        MENU,
+        GAME
+    };
+    public static STATE state;
+    public static String titleGetter;
+
+    Menu menu;
+
     public Game(String title, int width, int height) {
         this.width = width;
         this.height = height;
         this.title = title;
+        this.display = new Display(this.title, this.width, this.height);
+        titleGetter = title;
         this.points = 0;
+        this.menu = new Menu();
+        state = STATE.MENU;
+        this.inputHandler = new InputHandler(this.display);
+        init();
     }
 
     @Override
     public void run() {
-        init();
+        //init();
 
         int fps = 30;
         double timePerTick = 1_000_000_000.0 / fps;
         double delta = 0;
         long now;
         long lastTime = System.nanoTime();
-        long timer = 0;
-        int ticks = 0;
+        //long timer = 0;
+        //int ticks = 0;
 
         while (isRunning) {
             now = System.nanoTime();
             delta += (now - lastTime) / timePerTick;
-            timer += now - lastTime;
+            //timer += now - lastTime;
             lastTime = now;
 
             if (delta >= 1) {
                 tick();
-                render();
-                ticks++;
+                //ticks++;
                 delta--;
             }
+            render();
 
-            if (timer >= 1_000_000_000) {
-                ticks = 0;
-                timer = 0;
-            }
+            //if (timer >= 1_000_000_000) {
+            //    ticks = 0;
+            //    timer = 0;
+            //}
         }
 
         stop();
@@ -96,8 +111,8 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private void init() {
-        this.display = new Display(this.title, this.width, this.height);
+    public  void init() {
+
         this.bckgrImage = ImageLoader.loadImage("/textures/backgroundNew.png");
         ball = new Ball();
         this.bricks = new Brick[Constants.N_OF_BRICKS];
@@ -109,17 +124,17 @@ public class Game extends JPanel implements Runnable {
             }
         }
 
-        this.inputHandler = new InputHandler(this.display);
         Assets.init();
 
         paddle = new Paddle();
     }
 
     private void tick() {
-
-        paddle.tick();
-        ball.move();
-        this.checkForCollision();
+        if (state == STATE.GAME) {
+            paddle.tick();
+            ball.move();
+            this.checkForCollision();
+        }
     }
 
     private void render() {
@@ -132,21 +147,44 @@ public class Game extends JPanel implements Runnable {
         }
 
         g = bs.getDrawGraphics();
+
         g.clearRect(0, 0, this.width, this.height);
-        if (isRunning) {
-            g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
-            paddle.render(g);
-            ball.render(g);
+            start();
+            if (isRunning) {
+                g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
-            for (Brick brick : bricks) {
-                if (!brick.isDestroyed()) {
-                    brick.render(g);
+                if (state == STATE.GAME) {
+                    paddle.render(g);
+                    ball.render(g);
+
+                    for (Brick brick : bricks) {
+                        if (!brick.isDestroyed()) {
+                            brick.render(g);
+                        }
+                    }
+                } else if (state == STATE.MENU) {
+                    //start();
+                    g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
+
+                    Font font = new Font("Courier New", Font.BOLD, 35);
+                    FontMetrics fm = this.getFontMetrics(font);
+
+                    g.setColor(Color.BLUE);
+                    g.setFont(font);
+                    g.drawString(title,
+                            (Constants.WIDTH - fm.stringWidth(title)) / 2,
+                            Constants.HEIGHT / 4);
+
+                    //System.out.println("MENU state");
+
+                    Menu.render(g);
+
                 }
+
+            } else {
+                this.getFinalScreen(g);
             }
-        } else {
-            this.getFinalScreen(g);
-        }
 
         bs.show();
         g.dispose();
