@@ -1,6 +1,9 @@
 package game;
 
 import display.Display;
+import game.entities.Ball;
+import game.entities.Brick;
+import game.entities.Paddle;
 import gfx.ImageLoader;
 import gfx.Assets;
 
@@ -31,82 +34,6 @@ public class Game extends JPanel implements Runnable {
         this.height = height;
         this.title = title;
         this.points = 0;
-    }
-
-    private void init() {
-        this.display = new Display(this.title, this.width, this.height);
-        this.bckgrImage = ImageLoader.loadImage("/textures/test2.png");
-        ball = new Ball();
-        this.bricks = new Brick[Constants.N_OF_BRICKS];
-        int k = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                bricks[k] = new Brick(j * 41 + 25, i * 11 + 50);
-                k++;
-            }
-        }
-
-        this.inputHandler = new InputHandler(this.display);
-        Assets.init();
-
-        paddle = new Paddle();
-    }
-
-
-    private void tick() {
-
-        paddle.tick();
-        ball.move();
-        this.checkForCollision();
-    }
-
-
-    private void render() {
-
-        this.bs = display.getCanvas().getBufferStrategy();
-
-        if (bs == null) {
-            display.getCanvas().createBufferStrategy(2);
-            return;
-        }
-
-
-
-        g = bs.getDrawGraphics();
-        g.clearRect(0, 0, this.width, this.height);
-        if (isRunning) {
-            g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
-
-            paddle.render(g);
-            ball.render(g);
-
-            for (Brick brick : bricks) {
-                if (!brick.isDestroyed()) {
-                    brick.render(g);
-                }
-            }
-        } else {
-            this.getFinalScreen(g);
-        }
-
-        bs.show();
-        g.dispose();
-    }
-
-    private void getFinalScreen(Graphics g) {
-
-        Font font = new Font("Verdana", Font.BOLD, 18);
-        FontMetrics metr = this.getFontMetrics(font);
-
-        g.setColor(Color.BLACK);
-        g.setFont(font);
-        g.drawString(message,
-                (Constants.WIDTH - metr.stringWidth(message)) / 2,
-                Constants.WIDTH / 2);
-        String pointsMessage = String.format("Points: %d", points);
-        g.drawString(String.format(pointsMessage),
-                (Constants.WIDTH - metr.stringWidth(pointsMessage)) / 2,
-                Constants.WIDTH / 2 + 30);
     }
 
     @Override
@@ -167,6 +94,62 @@ public class Game extends JPanel implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void init() {
+        this.display = new Display(this.title, this.width, this.height);
+        this.bckgrImage = ImageLoader.loadImage("/textures/background.png");
+        ball = new Ball();
+        this.bricks = new Brick[Constants.N_OF_BRICKS];
+        int k = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 6; j++) {
+                bricks[k] = new Brick(j * 41 + 25, i * 11 + 50);
+                k++;
+            }
+        }
+
+        this.inputHandler = new InputHandler(this.display);
+        Assets.init();
+
+        paddle = new Paddle();
+    }
+
+    private void tick() {
+
+        paddle.tick();
+        ball.move();
+        this.checkForCollision();
+    }
+
+    private void render() {
+
+        this.bs = display.getCanvas().getBufferStrategy();
+
+        if (bs == null) {
+            display.getCanvas().createBufferStrategy(2);
+            return;
+        }
+
+        g = bs.getDrawGraphics();
+        g.clearRect(0, 0, this.width, this.height);
+        if (isRunning) {
+            g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
+
+            paddle.render(g);
+            ball.render(g);
+
+            for (Brick brick : bricks) {
+                if (!brick.isDestroyed()) {
+                    brick.render(g);
+                }
+            }
+        } else {
+            this.getFinalScreen(g);
+        }
+
+        bs.show();
+        g.dispose();
     }
 
     private void checkForCollision() {
@@ -246,9 +229,9 @@ public class Game extends JPanel implements Runnable {
                     }
 
                     if (bricks[i].getBoundingBox().contains(pointTop)) {
-                        ball.setYDir(2);
+                        ball.setYDir(1);
                     } else if (bricks[i].getBoundingBox().contains(pointBottom)) {
-                        ball.setYDir(-2);
+                        ball.setYDir(-1);
                     }
 
                     bricks[i].setDestroyed(true);
@@ -256,5 +239,21 @@ public class Game extends JPanel implements Runnable {
                 }
             }
         }
+    }
+
+    private void getFinalScreen(Graphics g) {
+
+        Font font = new Font("Verdana", Font.BOLD, 18);
+        FontMetrics metr = this.getFontMetrics(font);
+
+        g.setColor(Color.BLACK);
+        g.setFont(font);
+        g.drawString(message,
+                (Constants.WIDTH - metr.stringWidth(message)) / 2,
+                Constants.WIDTH / 2);
+        String pointsMessage = String.format("Points: %d", points);
+        g.drawString(String.format(pointsMessage),
+                (Constants.WIDTH - metr.stringWidth(pointsMessage)) / 2,
+                Constants.WIDTH / 2 + 30);
     }
 }
