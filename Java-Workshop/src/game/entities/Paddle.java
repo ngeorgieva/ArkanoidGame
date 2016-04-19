@@ -9,6 +9,7 @@ public class Paddle extends GameObject {
     private int velocity;
     public static boolean goingLeft;
     public static boolean goingRight;
+    public static int paddleX;
 
     public Paddle() {
         this.x = Constants.INIT_PADDLE_X;
@@ -41,6 +42,8 @@ public class Paddle extends GameObject {
                 x = Constants.WIDTH - Constants.PADDLE_WIDTH;
             }
         }
+
+        paddleX = this.x;
     }
 
     public void render(Graphics g) {

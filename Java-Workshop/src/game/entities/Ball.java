@@ -1,6 +1,7 @@
 package game.entities;
 
 import game.Constants;
+import game.InputHandler;
 import gfx.Assets;
 
 import java.awt.*;
@@ -9,7 +10,8 @@ public class Ball extends GameObject {
 
     private int xdir;
     private int ydir;
-    private int velocity = 2;
+    private int velocity = 5;
+    public static boolean isBallMoving = false;
 
     public Ball() {
         this.x = Constants.INIT_BALL_X;
@@ -29,30 +31,13 @@ public class Ball extends GameObject {
         return ydir;
     }
 
-    public void moveFaster() {
-
-        x += xdir;
-        y += ydir;
-
-        if (x == 0) {
-            setXDir(2);
-        }
-
-        if (x == Constants.WIDTH - Constants.BALL_WIDTH) {
-            setXDir(-2);
-        }
-
-        if (y == 0) {
-            setYDir(2);
-        }
-
-        this.boundingBox.setBounds(this.x, this.y, Constants.BALL_WIDTH, Constants.BALL_HEIGHT);
-    }
-
     public void move() {
-
-        x += xdir * velocity;
-        y += ydir * velocity;
+        if (!isBallMoving) {
+            this.x = Paddle.paddleX + (Constants.INIT_BALL_X - Constants.INIT_PADDLE_X);
+        } else {
+            x += xdir * velocity;
+            y += ydir * velocity;
+        }
 
         if (x <= 0) {
             setXDir(1);
