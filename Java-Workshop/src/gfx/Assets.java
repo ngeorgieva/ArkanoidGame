@@ -12,7 +12,7 @@ public class Assets {
 
     //Loads every resource needed for the game
     public static void init() {
-        SpriteSheet paddlePic = new SpriteSheet(ImageLoader.loadImage("/textures/test.gif"));
+        SpriteSheet paddlePic = new SpriteSheet(ImageLoader.loadImage("/textures/paddle.png"));
         brick = ImageLoader.loadImage("/textures/brick.png");
         ball = ImageLoader.loadImage("/textures/ball.gif");
         paddle = paddlePic.crop(0, 0, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT);

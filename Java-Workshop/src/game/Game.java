@@ -98,7 +98,7 @@ public class Game extends JPanel implements Runnable {
 
     private void init() {
         this.display = new Display(this.title, this.width, this.height);
-        this.bckgrImage = ImageLoader.loadImage("/textures/background.png");
+        this.bckgrImage = ImageLoader.loadImage("/textures/backgroundNew.png");
         ball = new Ball();
         this.bricks = new Brick[Constants.N_OF_BRICKS];
         int k = 0;

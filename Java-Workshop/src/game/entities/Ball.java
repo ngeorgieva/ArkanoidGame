@@ -9,6 +9,7 @@ public class Ball extends GameObject {
 
     private int xdir;
     private int ydir;
+    private int velocity = 2;
 
     public Ball() {
         this.x = Constants.INIT_BALL_X;
@@ -50,18 +51,18 @@ public class Ball extends GameObject {
 
     public void move() {
 
-        x += xdir;
-        y += ydir;
+        x += xdir * velocity;
+        y += ydir * velocity;
 
-        if (x == 0) {
+        if (x <= 0) {
             setXDir(1);
         }
 
-        if (x == Constants.WIDTH - Constants.BALL_WIDTH) {
+        if (x >= Constants.WIDTH - Constants.BALL_WIDTH) {
             setXDir(-1);
         }
 
-        if (y == 0) {
+        if (y <= 0) {
             setYDir(1);
         }
 

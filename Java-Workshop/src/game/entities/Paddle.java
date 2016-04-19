@@ -28,15 +28,15 @@ public class Paddle extends GameObject {
             if (x <= 0) {
                 x = 0;
             }
-            if (x >= Constants.WIDTH - Constants.PADDLE_WIDTH) {
-                x = Constants.WIDTH - Constants.PADDLE_WIDTH;
-            }
+            //if (x >= Constants.WIDTH - Constants.PADDLE_WIDTH) {
+            //    x = Constants.WIDTH - Constants.PADDLE_WIDTH;
+            //}
         }
         if(goingRight) {
             this.x += this.velocity;
-            if (x <= 0) {
-                x = 0;
-            }
+            //if (x <= 0) {
+            //    x = 0;
+            //}
             if (x >= Constants.WIDTH - Constants.PADDLE_WIDTH) {
                 x = Constants.WIDTH - Constants.PADDLE_WIDTH;
             }
