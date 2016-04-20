@@ -9,7 +9,7 @@ public class Ball extends GameObject {
 
     private int xdir;
     private int ydir;
-    private int velocity = 5;
+    private int velocity = 4;
     public static boolean hasGameStarted = false;
 
     public Ball() {

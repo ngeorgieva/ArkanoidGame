@@ -34,13 +34,18 @@ public class InputHandler implements KeyListener, MouseListener {
                 keyCode = -1;
                 Game.state = Game.STATE.MENU;
             }
-            //System.out.println(Game.state);
         }
 
-        //if (Game.state == Game.STATE.MENU && keyCode == KeyEvent.VK_ESCAPE) {
-        //    Game.state = Game.STATE.GAME;
-        //    Launcher.game.start();
-        //}
+        if(Game.state == Game.STATE.MENU && keyCode == KeyEvent.VK_ESCAPE) {
+            keyCode = -1;
+            Game.state = Game.STATE.GAME;
+        }
+
+        if (Game.state == Game.STATE.LEVEL_WON) {
+            Launcher.game.init();
+            Game.state = Game.STATE.GAME;
+            Ball.hasGameStarted = false;
+        }
     }
 
     @Override
@@ -75,9 +80,6 @@ public class InputHandler implements KeyListener, MouseListener {
             int mouseX = e.getX();
             int mouseY = e.getY();
 
-            System.out.println("Mouse X = " + e.getX());
-            System.out.println("Mouse Y = " + e.getY());
-
             if (mouseX >= Menu.resumeButton.x && mouseX <= Menu.resumeButton.x + Menu.BUTTON_WIDTH) {
                 //Resume button
                 if (mouseY >= Menu.resumeButton.y && mouseY <= Menu.resumeButton.y + Menu.BUTTON_HEIGHT && Ball.hasGameStarted) {
@@ -85,6 +87,7 @@ public class InputHandler implements KeyListener, MouseListener {
                 }
                 //New Game button
                 if (mouseY >= Menu.newGameButton.y && mouseY <= Menu.newGameButton.y + Menu.BUTTON_HEIGHT) {
+                    LevelBuilder.currentLevel = 0;
                     Launcher.game.init();
                     Game.state = Game.STATE.GAME;
                     Ball.hasGameStarted = false;

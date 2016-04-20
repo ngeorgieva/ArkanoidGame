@@ -14,7 +14,7 @@ public class Paddle extends GameObject {
     public Paddle() {
         this.x = Constants.INIT_PADDLE_X;
         this.y = Constants.INIT_PADDLE_Y;
-        this.velocity = 3;
+        this.velocity = 4;
         this.boundingBox = new Rectangle(this.x, this.y, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT);
         this.goingLeft = false;
         this.goingRight = false;

@@ -25,16 +25,17 @@ public class Game extends JPanel implements Runnable {
     private String message = "Game Over";
     private BufferedImage bckgrImage;
     private int points;
+    public static boolean isLevelWon;
 
     public static Paddle paddle;
     private Brick bricks[];
 
     public static enum STATE {
         MENU,
-        GAME
+        GAME,
+        LEVEL_WON
     };
     public static STATE state;
-    public static String titleGetter;
 
     Menu menu;
 
@@ -43,43 +44,32 @@ public class Game extends JPanel implements Runnable {
         this.height = height;
         this.title = title;
         this.display = new Display(this.title, this.width, this.height);
-        titleGetter = title;
         this.points = 0;
         this.menu = new Menu();
         state = STATE.MENU;
         this.inputHandler = new InputHandler(this.display);
         init();
+        start();
     }
 
     @Override
     public void run() {
-        //init();
-
         int fps = 30;
         double timePerTick = 1_000_000_000.0 / fps;
         double delta = 0;
         long now;
         long lastTime = System.nanoTime();
-        //long timer = 0;
-        //int ticks = 0;
 
         while (isRunning) {
             now = System.nanoTime();
             delta += (now - lastTime) / timePerTick;
-            //timer += now - lastTime;
             lastTime = now;
 
             if (delta >= 1) {
                 tick();
-                //ticks++;
                 delta--;
             }
             render();
-
-            //if (timer >= 1_000_000_000) {
-            //    ticks = 0;
-            //    timer = 0;
-            //}
         }
 
         stop();
@@ -111,18 +101,11 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public  void init() {
-
+    public void init() {
         this.bckgrImage = ImageLoader.loadImage("/textures/backgroundNew.png");
         ball = new Ball();
-        this.bricks = new Brick[Constants.N_OF_BRICKS];
-        int k = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                bricks[k] = new Brick(j * 41 + 25, i * 11 + 50);
-                k++;
-            }
-        }
+        LevelBuilder.buildLevel(LevelBuilder.currentLevel);
+        this.bricks = LevelBuilder.bricks;
 
         Assets.init();
 
@@ -150,7 +133,6 @@ public class Game extends JPanel implements Runnable {
 
         g.clearRect(0, 0, this.width, this.height);
 
-            start();
             if (isRunning) {
                 g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
@@ -163,23 +145,26 @@ public class Game extends JPanel implements Runnable {
                             brick.render(g);
                         }
                     }
+
+                    g.setFont(new Font("Arial", Font.BOLD, 15));
+                    g.setColor(Color.WHITE);
+                    g.drawString(String.format("SCORE %d", points), 5, 15);
+
                 } else if (state == STATE.MENU) {
-                    //start();
                     g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
                     Font font = new Font("Courier New", Font.BOLD, 35);
                     FontMetrics fm = this.getFontMetrics(font);
 
-                    g.setColor(Color.BLUE);
+                    g.setColor(Color.orange);
                     g.setFont(font);
                     g.drawString(title,
                             (Constants.WIDTH - fm.stringWidth(title)) / 2,
                             Constants.HEIGHT / 4);
 
-                    //System.out.println("MENU state");
-
                     Menu.render(g);
-
+                } else if (state == STATE.LEVEL_WON) {
+                    this.getFinalScreen(g);
                 }
 
             } else {
@@ -196,16 +181,25 @@ public class Game extends JPanel implements Runnable {
             this.isRunning = false;
         }
 
-        for (int i = 0, j = 0; i < Constants.N_OF_BRICKS; i++) {
+        for (int i = 0, j = 0; i < LevelBuilder.numberOfBricks; i++) {
 
             if (bricks[i].isDestroyed()) {
                 j++;
             }
 
-            if (j == Constants.N_OF_BRICKS) {
+            if (j == LevelBuilder.numberOfBricks) {
+                LevelBuilder.currentLevel++;
+                System.out.println("Current level " + LevelBuilder.currentLevel);
+                System.out.println("Number of levels" + Levels.numberOfLevels);
+                if (LevelBuilder.currentLevel < Levels.numberOfLevels) {
+                    message = "Level won!";
+                    state = STATE.LEVEL_WON;
+                } else {
+                    message = "Victory";
+                    this.isRunning = false;
+                }
 
-                message = "Victory";
-                this.isRunning = false;
+                //this.isRunning = false;
             }
         }
 
@@ -245,7 +239,7 @@ public class Game extends JPanel implements Runnable {
             }
         }
 
-        for (int i = 0; i < Constants.N_OF_BRICKS; i++) {
+        for (int i = 0; i < LevelBuilder.numberOfBricks; i++) {
 
             if ((ball.getBoundingBox()).intersects(bricks[i].getBoundingBox())) {
 
@@ -280,11 +274,12 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void getFinalScreen(Graphics g) {
+        g.drawImage(this.bckgrImage, 0, 0, this.width, this.height, null);
 
         Font font = new Font("Verdana", Font.BOLD, 18);
         FontMetrics metr = this.getFontMetrics(font);
 
-        g.setColor(Color.BLACK);
+        g.setColor(Color.WHITE);
         g.setFont(font);
         g.drawString(message,
                 (Constants.WIDTH - metr.stringWidth(message)) / 2,
@@ -293,5 +288,11 @@ public class Game extends JPanel implements Runnable {
         g.drawString(String.format(pointsMessage),
                 (Constants.WIDTH - metr.stringWidth(pointsMessage)) / 2,
                 Constants.WIDTH / 2 + 30);
+
+        if (state == STATE.LEVEL_WON) {
+            g.drawString("Press Space to continue",
+                    (Constants.WIDTH - metr.stringWidth("Press Space to continue")) / 2,
+                    Constants.WIDTH / 2 + 60);
+        }
     }
 }
