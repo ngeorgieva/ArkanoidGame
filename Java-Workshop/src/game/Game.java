@@ -22,7 +22,7 @@ public class Game extends JPanel implements Runnable {
     private InputHandler inputHandler;
     private BufferStrategy bs;
     private Graphics g;
-    private String message = "Game Over";
+    private String message;
     private BufferedImage bckgrImage;
     private int points;
     public static boolean isLevelWon;
@@ -178,6 +178,7 @@ public class Game extends JPanel implements Runnable {
     private void checkForCollision() {
 
         if (ball.getBoundingBox().getMaxY() > Constants.BOTTOM_EDGE) {
+            message = "Game Over";
             this.isRunning = false;
         }
 
