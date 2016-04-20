@@ -8,11 +8,12 @@ public class Levels {
     public static int numberOfLevels = 0;
 
     public static String[] level1 = {
-            "      ",
-            "      ",
-            "      ",
-            "    X ",
-            "      ",
+            " XXXXX",
+            "X XXXX",
+            "XX X X",
+            "XXX XX",
+            "XXXX X",
+            "XXXXX ",
     };
     public static String[] level2 = {
             "XXXXXX",
@@ -24,13 +25,7 @@ public class Levels {
             "XXXXXX"
     };
     public static String[] level3 = {
-            "X XXXX",
-            "XX X X",
-            "XXX XX",
-            "XX XXX",
-            "X XX X",
-    };
-    public static String[] level4 = {
+            "XXXXXX",
             "XXXXXX",
             "XXXXXX",
             "XXXXXX",
@@ -39,11 +34,9 @@ public class Levels {
     };
 
     public static void initLevels() {
-        brickPattern = new ArrayList<String[]>(Arrays.asList(level1, level2));
+        brickPattern = new ArrayList<String[]>(Arrays.asList(level1, level2, level3));
         numberOfLevels = brickPattern.size();
     }
-
-
 
     public static int getNumberOfBricks(int currentLevel) {
         int numberOfBricks = 0;
